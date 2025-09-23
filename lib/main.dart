@@ -32,8 +32,23 @@ class _CounterWidgetState extends State<CounterWidget> {
   // Task 1: method to increase counter by 1
   void _ignite() {
     setState(() {
-      // clamp value so it never goes above 100
-      _counter = (_counter + 1).clamp(0, 100);
+      // NOTE: Task 1 does not require a max cap
+      _counter = _counter + 1;
+    });
+  }
+
+  // Task 2: method to decrease counter by 1 (never below 0)
+  void _abort() {
+    setState(() {
+      _counter = _counter - 1;
+      if (_counter < 0) _counter = 0; // prevent negative fuel
+    });
+  }
+
+  // Task 2: method to reset counter to 0
+  void _reset() {
+    setState(() {
+      _counter = 0;
     });
   }
 
@@ -58,17 +73,11 @@ class _CounterWidgetState extends State<CounterWidget> {
             ),
           ),
 
-          // Ignite button (Task 1)
-          ElevatedButton(
-            onPressed: _ignite,
-            child: const Text("Ignite +1"),
-          ),
-
           // slider to adjust the counter value
           Slider(
             min: 0,
             max: 100,
-            value: _counter.toDouble(),
+            value: _counter.toDouble().clamp(0, 100),
             onChanged: (double value) {
               setState(() {
                 _counter = value.toInt();
@@ -76,6 +85,28 @@ class _CounterWidgetState extends State<CounterWidget> {
             },
             activeColor: Colors.blue,
             inactiveColor: Colors.red,
+          ),
+
+          // Ignite button (Task 1) — placed BELOW the slider per requirement
+          ElevatedButton(
+            onPressed: _ignite,
+            child: const Text("Ignite +1"),
+          ),
+
+          // Task 2: Abort (decrement) and Reset buttons
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              OutlinedButton(
+                onPressed: _abort,
+                child: const Text('Abort -1'),
+              ),
+              const SizedBox(width: 12),
+              TextButton(
+                onPressed: _reset,
+                child: const Text('Reset'),
+              ),
+            ],
           ),
         ],
       ),
