@@ -38,6 +38,21 @@ List<Color> containerGradient = [Colors.red, Colors.redAccent];
       // NOTE: Task 1 does not require a max cap
       _counter += 1;
       _counter = _counter.clamp(0,100);
+      if(_counter == 100) {
+        //show a snackbar
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("LIFTOFF!!!!",
+            style: TextStyle(
+              fontSize: 50.0,
+              fontStyle: FontStyle.italic,
+              color: Colors.red
+            )
+
+            )
+            )
+            );
+      }
       _updateContainerColor();
     });
   }
@@ -112,6 +127,21 @@ List<Color> containerGradient = [Colors.red, Colors.redAccent];
               setState(() {
                 _counter = value.toInt();
                 _updateContainerColor();
+                if(_counter == 100) {
+        //show a snackbar
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("LIFTOFF!!!!",
+            style: TextStyle(
+              fontSize: 50.0,
+              fontStyle: FontStyle.italic,
+              color: Colors.red
+            )
+
+            ),
+            )
+            );
+      }
               });
             },
             activeColor: Colors.blue,
