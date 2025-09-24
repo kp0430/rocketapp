@@ -28,12 +28,17 @@ class CounterWidget extends StatefulWidget {
 class _CounterWidgetState extends State<CounterWidget> {
   // set counter value
   int _counter = 0;
+  
+  //set color variable
+List<Color> containerGradient = [Colors.red, Colors.redAccent];
 
   // Task 1: method to increase counter by 1
   void _ignite() {
     setState(() {
       // NOTE: Task 1 does not require a max cap
-      _counter = _counter + 1;
+      _counter += 1;
+      _counter = _counter.clamp(0,100);
+      _updateContainerColor();
     });
   }
 
@@ -41,6 +46,8 @@ class _CounterWidgetState extends State<CounterWidget> {
   void _abort() {
     setState(() {
       _counter = _counter - 1;
+      _updateContainerColor();
+       _counter = _counter.clamp(0,100);
       if (_counter < 0) _counter = 0; // prevent negative fuel
     });
   }
@@ -49,7 +56,22 @@ class _CounterWidgetState extends State<CounterWidget> {
   void _reset() {
     setState(() {
       _counter = 0;
+      _updateContainerColor();
     });
+  }
+
+  void _updateContainerColor() {
+    // 0 to 50 is a gradient change from red to orange
+     if (_counter <= 50) {
+    double t = (_counter.clamp(0, 50)) / 50;
+    Color mix = Color.lerp(Colors.red, Colors.orange, t)!;
+    containerGradient = [mix, mix.withOpacity(0.2)];
+    //50 to 100 is a gradient change from orange to green
+  } else {
+    double t = ((_counter.clamp(50, 100)) - 50) / 50;
+    Color mix2 = Color.lerp(Colors.orange, Colors.green, t)!;
+    containerGradient = [mix2, mix2.withOpacity(0.2)];
+  }
   }
 
   @override
@@ -63,8 +85,16 @@ class _CounterWidgetState extends State<CounterWidget> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Center(
-            child: Container(
-              color: Colors.blue,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 400),
+              curve: Curves.easeInOut,
+              decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors:containerGradient,
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight
+                ),
+              ),
               child: Text(
                 // to displays current number
                 '$_counter',
@@ -81,6 +111,7 @@ class _CounterWidgetState extends State<CounterWidget> {
             onChanged: (double value) {
               setState(() {
                 _counter = value.toInt();
+                _updateContainerColor();
               });
             },
             activeColor: Colors.blue,
