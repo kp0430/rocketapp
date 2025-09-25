@@ -101,7 +101,7 @@ List<Color> containerGradient = [Colors.red, Colors.redAccent];
         children: [
           Center(
             child: AnimatedContainer(
-              duration: const Duration(milliseconds: 400),
+              duration: const Duration(milliseconds: 100),
               curve: Curves.easeInOut,
               decoration: BoxDecoration(
               gradient: LinearGradient(
